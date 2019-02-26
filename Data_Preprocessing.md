@@ -1,17 +1,17 @@
-## DEMULTIPLEXING
-demultiplex the raw sequencing data in the form of BCL files
-resulting files are FASTQ.GZ files
-uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
-
+# DEMULTIPLEXING
+..* demultiplex the raw sequencing data in the form of BCL files
+..* resulting files are FASTQ.GZ files
+..* uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
 ```shell
 cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet>
 ```
 
-## QUALITY CHECK
-## run quality check on the fastq.gz files
-## uses FASTQC software program
-
+# QUALITY CHECK
+..* run quality check on the fastq.gz files
+..* uses FASTQC software program
+```shell
 ls *.fastq.gz | sed "s/.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; fastqc %.fastq.gz'
+```
 
 ## WHITELIST
 ## estimate and create a whitelist of real cell barcodes from the quality filtered fastq.gz files
