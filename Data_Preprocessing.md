@@ -1,6 +1,6 @@
 # DEMULTIPLEXING
-* demultiplex the raw sequencing data in the form of BCL files
-* resulting files are FASTQ.GZ files
+* demultiplex the raw sequencing data BCL files
+* resulting files are **fastq.gz** files
 * uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
 ```shell
 cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet>
