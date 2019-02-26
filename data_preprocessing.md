@@ -113,4 +113,4 @@ for BFILE in `ls *featureCounts.bam`
 ls *_STAR_Aligned_Assigned_Sorted.bam | sed "s/_STAR_Aligned_Assigned_Sorted.bam//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_tools count --per-gene --gene-tag=XT --per-cell --stdin=%_STAR_Aligned_Assigned_Sorted.bam --stdout=%_Counts.tsv.gz --log=%_Counts.log --error=%_Counts.err --wide-format-cell-counts'
 ```
  
- 
+
