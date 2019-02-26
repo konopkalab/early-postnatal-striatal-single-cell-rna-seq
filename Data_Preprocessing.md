@@ -1,6 +1,6 @@
 # DEMULTIPLEXING
 * demultiplex the raw sequencing data BCL files
-* resulting files are **fastq.gz** files
+* resulting files are fastq.gz files
 * uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
 ```shell
 cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet>
@@ -33,14 +33,15 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 * uses STAR software program
 
 ## Prior alignment, reference genome index need to be built
-. . * This is one-time only step and can be used multipli times for same genome build.
-. . * Genome build: Mouse genome GRCm38.p6 (MM10)
-. . * Annotation: Gencode vM17
-
+- This is one-time only step and can be used multipli times for same genome build.
+- Genome build: Mouse genome GRCm38.p6 (MM10)
+- Annotation: Gencode vM17
+```shell
 STAR --runMode genomeGenerate --runThreadN 48 --genomeDir <genome index directory> --genomeFastaFiles <reference genome fasta file> --sjdbGTFfile <reference annotation gtf file> --sjdbOverhang 100
-
+```
 
 ## Once the genome index is ready, run the alignment as below
+```shell
 for FQFILE in `ls *R2_extracted*.gz`
  do
   prefx=`echo ${FQFILE} | sed "s/_R2_extracted.fastq.gz//g"`
@@ -60,5 +61,7 @@ for FQFILE in `ls *R2_extracted*.gz`
        --outFilterMismatchNmax 5 \
        --twopassMode Basic \
        --outFileNamePrefix ${prefx}_STAR_
-
  done
+ ```
+ 
+ 
