@@ -37,9 +37,9 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 * uses STAR software program
 
 ## Prior alignment, reference genome index need to be built
-- This is one-time only step and can be used multipli times for same genome build.
-- Genome build: Mouse genome GRCm38.p6 (MM10)
-- Annotation: Gencode vM17
+- This is one-time only step and can be used multiple times for same genome build
+- genome build: mouse genome GRCm38.p6 (MM10)
+- annotation: gencode vM17
 ```shell
 STAR --runMode genomeGenerate --runThreadN 48 --genomeDir <genome index directory> --genomeFastaFiles <reference genome fasta  file> --sjdbGTFfile <reference annotation gtf file> --sjdbOverhang 100
 ```
@@ -70,8 +70,8 @@ for FQFILE in `ls *R2_extracted*.gz`
 
 
 # READS ASSIGNMENT 
-* This is a shell script to assign the aligned reads with reference annotation
-* Script uses featureCounts software program
+* assign the aligned reads with reference annotation
+* uses featureCounts software program
 ```shell
 for BAMFILE in `ls *_STAR_Aligned.sortedByCoord.out.bam`
  do
