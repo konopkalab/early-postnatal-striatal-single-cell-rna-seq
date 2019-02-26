@@ -1,0 +1,5 @@
+## This is a shell script to demultiplex the raw sequencing data in the form of BCL files
+## The resulting files are FASTQ.GZ files
+## Script uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
+
+cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet>
