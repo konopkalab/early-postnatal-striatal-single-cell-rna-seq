@@ -4,7 +4,7 @@ This script performs normalization, scaling on subset of data corresponding to n
 
 
 
-####DATA NORMALIZATION
+#### DATA NORMALIZATION
 
 ```{r}
 ## load seurat object created after data subset
@@ -65,7 +65,7 @@ save(aaxPC, file = "STR_SPN_SEURAT_DATA_NORM_PCA.RData")
 
 
 
-####DATA CLUSTERING
+#### DATA CLUSTERING
 
 ```{r}
 ## based on PCA analysis, identify the number of PCs for clustering
@@ -93,7 +93,7 @@ save(aaxNormClust, file = "STR_SPN_SEURAT_DATA_NORM_PCA_CLUST.RData")
 
 
 
-####DEG ANALYSIS
+#### DEG ANALYSIS
 
 ```{r}
 # find markers for every cluster compared to all remaining cells
