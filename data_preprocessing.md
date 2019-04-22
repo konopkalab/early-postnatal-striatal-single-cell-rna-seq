@@ -1,30 +1,43 @@
-# DEMULTIPLEXING
+#DATA PRE-PROCESSING
+
+This script performs pre-processing of the raw sequencing data to generate UMI count tables in multiple steps. Script primarily runs in bash or linux shell and makes use of few tools such as Illumin's bcl2fastq, 10X Genomics's CellRanger, FASTQC, STAR, featureCounts, 
+
+
+
+####DEMULTIPLEXING
+
 * demultiplex the raw sequencing data BCL files
 * resulting files are fastq.gz files
-* uses Illumina's bcl2fastq and 10X Genomics CellRanger software program
+* uses Illumina's *bcl2fastq* and 10X Genomics *CellRanger* software program
 ```shell
 cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet>
 ```
 
 
-# QUALITY CHECK
+
+####QUALITY CHECK
+
 * run quality check on the fastq.gz files
-* uses FASTQC software program
+* uses *FASTQC* software program
 ```shell
 ls *.fastq.gz | sed "s/.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; fastqc %.fastq.gz'
 ```
 
 
-# WHITELIST
-* estimate and create a whitelist of real cell barcodes from the quality filtered fastq.gz files
+
+####WHITELIST
+
+* estimate and create a *whitelist* of real cell barcodes from the quality filtered fastq.gz files
 * uses UMI Tools software program
 ```shell
 ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_tools whitelist --stdin=%_R1.fastq.gz --bc-pattern=CCCCCCCCCCCCCCCCNNNNNNNNNN --expect-cells=<number of expected cells> --plot-prefix=%_Expect_Whitelist --log=%_Whitelist_log.out --error=%_Whitelist_log.err --stdout=%_Whitelist.txt'
 ```
 
 
-# EXTRACT READS
-* extract the reads corresponding to estimated whitelist of real cell barcodes
+
+####EXTRACT READS
+
+* *extract* the reads corresponding to estimated whitelist of real cell barcodes
 * also appends the cell-barcode and umi information from R1 fastq files to read names of R2 fastq files
 * uses UMI Tools software program
 ```shell
@@ -32,11 +45,16 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 ```
 
 
-# READS ALIGNMENT
-* align the extracted reads with reference genome and annotation
-* uses STAR software program
 
-## Prior alignment, reference genome index need to be built
+####READS ALIGNMENT
+
+* align the extracted reads with reference genome and annotation
+* uses *STAR* software program
+
+
+
+######Prior alignment, reference genome index need to be built
+
 - This is one-time only step and can be used multiple times for same genome build
 - genome build: mouse genome GRCm38.p6 (MM10)
 - annotation: gencode vM17
@@ -44,7 +62,10 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 STAR --runMode genomeGenerate --runThreadN 48 --genomeDir <genome index directory> --genomeFastaFiles <reference genome fasta  file> --sjdbGTFfile <reference annotation gtf file> --sjdbOverhang 100
 ```
 
-## Once the genome index is ready, run the alignment as below
+
+
+######Once the genome index is ready, run the alignment as below
+
 ```shell
 for FQFILE in `ls *R2_extracted*.gz`
  do
@@ -66,12 +87,14 @@ for FQFILE in `ls *R2_extracted*.gz`
        --twopassMode Basic \
        --outFileNamePrefix ${prefx}_STAR_
  done
- ```
+```
 
 
-# READS ASSIGNMENT 
+
+####READS ASSIGNMENT 
+
 * assign the aligned reads with reference annotation
-* uses featureCounts software program
+* uses *featureCounts* software program
 ```shell
 for BAMFILE in `ls *_STAR_Aligned.sortedByCoord.out.bam`
  do
@@ -93,9 +116,11 @@ for BAMFILE in `ls *_STAR_Aligned.sortedByCoord.out.bam`
 ```
 
 
-# SORT AND INDEX BAM FILE
-* sort and index the assigned bam file
-* uses Samtools software program
+
+####SORT AND INDEX BAM FILE
+
+* *sort* and *index* the assigned bam file
+* uses *Samtools* software program
 ```shell
 for BFILE in `ls *featureCounts.bam` 
  do
@@ -106,11 +131,13 @@ for BFILE in `ls *featureCounts.bam`
 ```
 
 
-# COUNT UMI PER GENE PER CELL
-* generate count table from assigned and sorted reads
+
+####COUNT UMI PER GENE PER CELL
+
+* generate *count* table from assigned and sorted reads
 * uses UMI Tools software program
 ```shell
 ls *_STAR_Aligned_Assigned_Sorted.bam | sed "s/_STAR_Aligned_Assigned_Sorted.bam//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_tools count --per-gene --gene-tag=XT --per-cell --stdin=%_STAR_Aligned_Assigned_Sorted.bam --stdout=%_Counts.tsv.gz --log=%_Counts.log --error=%_Counts.err --wide-format-cell-counts'
 ```
- 
+
 
