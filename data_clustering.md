@@ -191,7 +191,7 @@ save(str.markers, file = "STR_SEURAT_DATA_FILT_NORM_PCA_CLUST_DEG.RData")
 
 
 
-####SESSION INFO
+#### SESSION INFO
 
 ```{r}
 sessionInfo()
@@ -260,5 +260,4 @@ loaded via a namespace (and not attached):
 
 
 
-Last updated: 4/17/2019.
 
