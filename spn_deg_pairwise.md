@@ -4,8 +4,7 @@ This script performs DEG test between a group of cells vs. another group defined
 
 
 
-####DEG PAIRWISE
-
+#### DEG PAIRWISE
 ```{r}
 ## load seurat object with UMAP clustering information
 load("STR_SPN_SEURAT_DATA_NORM_PCA_CLUST.RData")
@@ -38,9 +37,10 @@ for (i in 0:24)
 			}
 		}
 	}
+```
 
-
-## session info
+#### SESSION INFO
+```{r}
 sessionInfo()
 
 R version 3.4.1 (2017-06-30)
