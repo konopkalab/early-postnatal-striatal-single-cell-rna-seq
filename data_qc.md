@@ -176,5 +176,3 @@ loaded via a namespace (and not attached):
 
 
 
-Last updated: 04/18/2019.
-
