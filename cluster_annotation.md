@@ -4,7 +4,7 @@ This script covers the two approaches used to annotate and classify cells into d
 
 
 
-####IDENTIFICATION OF CLUSTER MARKERS FOR PUBLISHED REFERENCE DATASETS
+#### IDENTIFICATION OF CLUSTER MARKERS FOR PUBLISHED REFERENCE DATASETS
 
 The published reference dataset (Saunders et al., 2018, Cell 174, 1015–1030, http://dropviz.org) is composed of cell types from 9 regions of adult mouse brain. Here, only striatal dataset was used to identify cluster-specific gene markers using Seurat (v2.3.4) pipeline without filtering the dataset and keeping the original published cell-type annotation intact.
 
@@ -525,6 +525,4 @@ loaded via a namespace (and not attached):
 2. Skene et al., 2016, Front. Neurosci. 10:16. <https://doi.org/10.3389/fnins.2016.00016>
 
 
-
-Last updated: 04/17/2019.
 
