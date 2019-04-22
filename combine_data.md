@@ -1,4 +1,4 @@
-#COMBINE DATA
+# COMBINE DATA
 
 This early post-natal striatal single cell RNA-seq data was generated for four genotypes (i) CTL, (ii) D1cKO, (iii) D2cKO & (iv) DDcKO. Each genotype has 4 biological replicates (4 mice). Single cell RNA-seq library was generated for each sample using 10X Genomics v2 microfluidics platform. And each library was sequenced for more than once (technical replicates) to increase the reads depth. Purpose of this script is to collapse the technical replicates for each library for each genotype followed by combining all libraries from all genotypes into a single UMI counts matrix for downstream processing. The code chunks need to be re-run changing the library/genotype name in order to process all libraries for all genotypes.
 
@@ -6,7 +6,7 @@ This early post-natal striatal single cell RNA-seq data was generated for four g
 
 #### COLLAPSE TECHINCAL REPLICATES PER LIBRARY/SAMPLE
 
-######Read Reference Genes ID/Names List (Gencode vM17)
+###### Read Reference Genes ID/Names List (Gencode vM17)
 
 Raw UMI counts matrix for each sequencing run of every library is not identical due to many reasons. The goal of this part is to match all technical replicates using a reference list of gene names/symbols from Gencode vM17 reference annotation. 
 
@@ -19,7 +19,7 @@ row.names(refGenesSymbol) <- refGenesSymbol$genes
 
 
 
-######Read and update UMI count tables
+###### Read and update UMI count tables
 
 Read UMI Counts table for each technical run for each library/sample and merge the table with reference gene symbols. For the genes missing in the counts table, replace NAs add zeros. The data frames for each technical replicate are organized in a list *dataList* and list of cell barcodes from each technical replicate are organized in a list *libCells*.
 
@@ -54,7 +54,7 @@ for(i in 1:length(dataList))
 
 
 
-######Identify and extract common cells for each library
+###### Identify and extract common cells for each library
 
 Using the list of lists for cell barcodes (*libCells*) and list of data frames (*dataList*) for each library created in earlier step, identify cell barcodes that are common to all technical replicates and extract data from each technical replicate corresponding to common cell barcodes into another list of data frames *dataCOMMON*. To generate a plot of common cell barcodes across technical replicates, script uses *UpSetR* R package.
 
@@ -125,7 +125,7 @@ save(newDataAggr, file = paste(nameLIB, "Collapsed_Data.RData", sep = "_"))
 
 
 
-####COMBINE LIBRARIES/SAMPLES PER GENOTYPE
+#### COMBINE LIBRARIES/SAMPLES PER GENOTYPE
 
 In the next step, collapsed UMI counts per library/sample for each genotype is combined into a single data frame. Combined genotype data is stored in RData for further use.
 
@@ -206,7 +206,7 @@ The final combined matrix has a total of 63,984 cells.
 
 
 
-####R SESSION INFO
+#### R SESSION INFO
 
 ```{r}
 sessionInfo()
@@ -244,4 +244,4 @@ loaded via a namespace (and not attached):
 
 
 
-Last updated: 04/18/2019.
+
