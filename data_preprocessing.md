@@ -1,10 +1,10 @@
-#DATA PRE-PROCESSING
+# DATA PRE-PROCESSING
 
 This script performs pre-processing of the raw sequencing data to generate UMI count tables in multiple steps. Script primarily runs in bash or linux shell and makes use of few tools such as Illumin's bcl2fastq, 10X Genomics's CellRanger, FASTQC, STAR, featureCounts, 
 
 
 
-####DEMULTIPLEXING
+#### DEMULTIPLEXING
 
 * demultiplex the raw sequencing data BCL files
 * resulting files are fastq.gz files
@@ -15,7 +15,7 @@ cellranger mkfastq --run=<path to BCL files> --samplesheet=<path to sample sheet
 
 
 
-####QUALITY CHECK
+#### QUALITY CHECK
 
 * run quality check on the fastq.gz files
 * uses *FASTQC* software program
@@ -25,7 +25,7 @@ ls *.fastq.gz | sed "s/.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; fast
 
 
 
-####WHITELIST
+#### WHITELIST
 
 * estimate and create a *whitelist* of real cell barcodes from the quality filtered fastq.gz files
 * uses UMI Tools software program
@@ -35,7 +35,7 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 
 
 
-####EXTRACT READS
+#### EXTRACT READS
 
 * *extract* the reads corresponding to estimated whitelist of real cell barcodes
 * also appends the cell-barcode and umi information from R1 fastq files to read names of R2 fastq files
@@ -46,14 +46,14 @@ ls *R1*.gz | sed "s/_R1.fastq.gz//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_
 
 
 
-####READS ALIGNMENT
+#### READS ALIGNMENT
 
 * align the extracted reads with reference genome and annotation
 * uses *STAR* software program
 
 
 
-######Prior alignment, reference genome index need to be built
+###### Prior alignment, reference genome index need to be built
 
 - This is one-time only step and can be used multiple times for same genome build
 - genome build: mouse genome GRCm38.p6 (MM10)
@@ -64,7 +64,7 @@ STAR --runMode genomeGenerate --runThreadN 48 --genomeDir <genome index director
 
 
 
-######Once the genome index is ready, run the alignment as below
+###### Once the genome index is ready, run the alignment as below
 
 ```shell
 for FQFILE in `ls *R2_extracted*.gz`
@@ -91,7 +91,7 @@ for FQFILE in `ls *R2_extracted*.gz`
 
 
 
-####READS ASSIGNMENT 
+#### READS ASSIGNMENT 
 
 * assign the aligned reads with reference annotation
 * uses *featureCounts* software program
@@ -117,7 +117,7 @@ for BAMFILE in `ls *_STAR_Aligned.sortedByCoord.out.bam`
 
 
 
-####SORT AND INDEX BAM FILE
+#### SORT AND INDEX BAM FILE
 
 * *sort* and *index* the assigned bam file
 * uses *Samtools* software program
@@ -132,11 +132,12 @@ for BFILE in `ls *featureCounts.bam`
 
 
 
-####COUNT UMI PER GENE PER CELL
+#### COUNT UMI PER GENE PER CELL
 
 * generate *count* table from assigned and sorted reads
 * uses UMI Tools software program
 ```shell
 ls *_STAR_Aligned_Assigned_Sorted.bam | sed "s/_STAR_Aligned_Assigned_Sorted.bam//g" | xargs -I % -n 1 -P 48 sh -c 'echo %; umi_tools count --per-gene --gene-tag=XT --per-cell --stdin=%_STAR_Aligned_Assigned_Sorted.bam --stdout=%_Counts.tsv.gz --log=%_Counts.log --error=%_Counts.err --wide-format-cell-counts'
 ```
+
 
